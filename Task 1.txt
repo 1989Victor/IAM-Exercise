@@ -1,0 +1,43 @@
+Policy 1
+
+Create an IAM user and attach a custom policy that satisfy the below condition.
+    a. The user should only have access to see the list of files on any bucket name that has the word spark-job in s3. 
+    b. The user should be able to delete any file in the bucket spark-job-data-input in the folder dumps except for the files that ends with csv.
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "Statement2",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*spark-job*",
+                "arn:aws:s3:::spark-job-data-input/dumps/"
+            ]
+        },
+        {
+            "Sid": "Statement3",
+            "Effect": "Deny",
+            "Action": [
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::spark-job-data-input/dumps/*.csv*"
+            ]
+        }
+    ]
+}
